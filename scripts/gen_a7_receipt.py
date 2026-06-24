@@ -2,11 +2,6 @@
 # requires-python = ">=3.12"
 # ///
 
-# Requirements:
-# - typst: https://typst.app/
-# - ImageMagick: https://imagemagick.org/ (command: magick)
-# - uv: https://docs.astral.sh/uv/
-
 import sys
 import argparse
 import subprocess
@@ -46,10 +41,10 @@ def generate_typ(content_path, size_str, font_str, scripts_dir, output_dir):
     font_array = "(" + ", ".join(f'"{f}"' for f in fonts) + ",)"
 
     original_content = content_path.read_text(encoding="utf-8")
-    
+
     template_rel = Path("../../../scripts/receipt-template.typ")
     template_rel_str = template_rel.as_posix()
-    
+
     content = f"""#import "{template_rel_str}": *
 #show: receipt-layout.with(size: {size_str}, font: {font_array})
 

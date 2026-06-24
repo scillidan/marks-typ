@@ -2,11 +2,6 @@
 # requires-python = ">=3.12"
 # ///
 
-# Requirements:
-# - typst: https://typst.app/
-# - ImageMagick: https://imagemagick.org/ (command: magick)
-# - uv: https://docs.astral.sh/uv/
-
 import sys
 import argparse
 import subprocess
@@ -49,11 +44,14 @@ def generate_typ(content_path, size_str, font_str, output_dir):
 
     md_rel_path = f"../../{content_path.name}"
 
-    content = f"""#import "@preview/cmarker:0.1.8"
+    content = f"""#import "@preview/cmarker:0.1.9"
 
 #set page(paper: "a6", margin: 5%)
 #set text(font: {font_array}, size: {size_str})
 #set par(justify: true)
+
+#show raw.where(block: false): set text(font: {font_array}, size: {size_str})
+#show raw.where(block: true):  set text(font: {font_array}, size: 0.9em)
 
 #cmarker.render(read("{md_rel_path}"))"""
 

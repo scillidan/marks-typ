@@ -5,12 +5,6 @@
 # ]
 # ///
 
-# Requirements:
-# - typst: https://typst.app/
-# - ImageMagick: https://imagemagick.org/ (command: magick)
-# - upscayl-bin: https://github.com/upscayl/upscayl (optional, for image upscaling on Windows)
-# - uv: https://docs.astral.sh/uv/
-
 import sys
 import argparse
 import shutil
@@ -232,11 +226,14 @@ def generate_typ_single(content_path, size_str, fonts, output_dir):
         size_str = size_str + "pt"
 
     font_str = ", ".join(f'"{f}"' for f in fonts)
-    content = f"""#import "@preview/cmarker:0.1.8"
+    content = f"""#import "@preview/cmarker:0.1.9"
 
 #set page(paper: "a4", margin: 2%, columns: 2)
 #set text(font: ({font_str}), size: {size_str})
 #set par(justify: true)
+
+#show raw.where(block: false): set text(font: ({font_str}), size: {size_str})
+#show raw.where(block: true):  set text(font: ({font_str}), size: {size_str})
 
 #show image: set align(center)
 #set image(width: 100%)
@@ -267,7 +264,7 @@ def generate_typ_dual_two_files(content_path_left, content_path_right, size_str,
 
     font_str = ", ".join(f'"{f}"' for f in fonts)
     output_name = f"{content_path_left.stem}-{content_path_right.stem}"
-    content = f"""#import "@preview/cmarker:0.1.8"
+    content = f"""#import "@preview/cmarker:0.1.9"
 
 #set page(paper: "a4", margin: 2%)
 #set text(font: ({font_str}), size: {size_str})

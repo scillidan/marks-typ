@@ -3,11 +3,6 @@
 # dependencies = []
 # ///
 
-# Requirements:
-# - typst: https://typst.app/
-# - ImageMagick: https://imagemagick.org/ (command: magick)
-# - uv: https://docs.astral.sh/uv/
-
 import sys
 import os
 import argparse
