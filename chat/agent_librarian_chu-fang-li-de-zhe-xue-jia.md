@@ -1,6 +1,6 @@
 ```
-model: https://openwebui.com/m/javi/librarian:latest
-base_model: qwen3:14b
+Agent: https://openwebui.com/m/javi/librarian:latest
+Model: qwen3:14b
 ```
 
 Q: 摘：富裕的罗马人为自家的花园而感到骄傲，花园里不但种植像梨、无花果、葡萄之类人们熟悉的水果，而且还种植从国外刚刚发现的新品种，如亚美尼亚的杏，伊达山谷的草莓，还有罗马大将卢卡拉斯攻陷本都王国后带回的樱桃。

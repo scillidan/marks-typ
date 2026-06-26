@@ -1,6 +1,6 @@
 ```
-model: https://openwebui.com/m/javi/librarian:latest
-base_model: GPT-5.4
+Agent: https://openwebui.com/m/javi/librarian:latest
+Model: GPT-5.4
 ```
 
 Q: 这段话在说什么？为它写一段200-300字的笔记或注解：
