@@ -52,14 +52,21 @@ def upscale_image_if_needed(source_path, dest_path):
                 model_path = get_upscayl_model_path()
                 upscayl_cmd = [
                     "upscayl-bin" if platform.system() == "Windows" else "upscayl",
-                    "-m", str(model_path),
-                    "-n", "4xLSDIR",
-                    "-w", "800",
-                    "-i", str(source_path),
-                    "-o", str(dest_path),
+                    "-m",
+                    str(model_path),
+                    "-n",
+                    "4xLSDIR",
+                    "-w",
+                    "800",
+                    "-i",
+                    str(source_path),
+                    "-o",
+                    str(dest_path),
                 ]
 
-                result = subprocess.run(upscayl_cmd, capture_output=True, text=True, encoding="utf-8")
+                result = subprocess.run(
+                    upscayl_cmd, capture_output=True, text=True, encoding="utf-8"
+                )
 
                 if result.returncode != 0:
                     print(f"Error upscaling {source_path.name}: {result.stderr}")
@@ -87,6 +94,7 @@ def get_image_source(content_dir):
 
 
 _image_source_warned = False
+
 
 def process_markdown(md_path, content_dir, output_dir, filename_suffix=""):
     if not md_path.exists():
@@ -185,6 +193,7 @@ def process_markdown(md_path, content_dir, output_dir, filename_suffix=""):
     )
 
     import re as re2
+
     md_content_local = re2.sub(r"\n{3,}", "\n\n", md_content_local)
 
     suffix = f"-{filename_suffix}" if filename_suffix else ""
@@ -199,16 +208,39 @@ def copy_to_cmarker(images_dir):
     if not images_dir.exists():
         return
     try:
-        cmarker_dir = Path.home() / "AppData" / "Local" / "typst" / "packages" / "preview" / "cmarker" / "0.1.8"
+        cmarker_dir = (
+            Path.home()
+            / "AppData"
+            / "Local"
+            / "typst"
+            / "packages"
+            / "preview"
+            / "cmarker"
+            / "0.1.9"
+        )
         if platform.system() != "Windows":
-            cmarker_dir = Path.home() / ".local" / "share" / "typst" / "packages" / "preview" / "cmarker" / "0.1.8"
+            cmarker_dir = (
+                Path.home()
+                / ".local"
+                / "share"
+                / "typst"
+                / "packages"
+                / "preview"
+                / "cmarker"
+                / "0.1.9"
+            )
 
         cmarker_images_dir = cmarker_dir / "images"
         cmarker_images_dir.mkdir(parents=True, exist_ok=True)
 
         for image_path in images_dir.glob("*"):
             if image_path.suffix.lower() in [
-                ".jpg", ".jpeg", ".png", ".gif", ".svg", ".webp",
+                ".jpg",
+                ".jpeg",
+                ".png",
+                ".gif",
+                ".svg",
+                ".webp",
             ]:
                 dest_path = cmarker_images_dir / image_path.name
                 shutil.copy2(image_path, dest_path)
@@ -219,7 +251,9 @@ def copy_to_cmarker(images_dir):
 
 
 def generate_typ_single(content_path, size_str, fonts, output_dir):
-    md_processed_path, images_dir = process_markdown(content_path, content_path.parent, output_dir)
+    md_processed_path, images_dir = process_markdown(
+        content_path, content_path.parent, output_dir
+    )
     copy_to_cmarker(images_dir)
 
     if not any(c.isalpha() for c in size_str):
@@ -248,7 +282,9 @@ def generate_typ_single(content_path, size_str, fonts, output_dir):
     return typ_path, md_processed_path, images_dir
 
 
-def generate_typ_dual_two_files(content_path_left, content_path_right, size_str, fonts, output_dir):
+def generate_typ_dual_two_files(
+    content_path_left, content_path_right, size_str, fonts, output_dir
+):
     content_dir = content_path_left.parent
 
     md_left_processed, images_dir = process_markdown(
@@ -339,8 +375,12 @@ if __name__ == "__main__":
     parser.add_argument("path", help="Path to markdown file")
     parser.add_argument("--size", default="8pt", help="Font size (default: 8pt)")
     parser.add_argument("--font", dest="fonts", help="Font names (comma-separated)")
-    parser.add_argument("--two-column", dest="two_column", default=None,
-                        help="Two-column comparison with second file path")
+    parser.add_argument(
+        "--two-column",
+        dest="two_column",
+        default=None,
+        help="Two-column comparison with second file path",
+    )
     args = parser.parse_args()
 
     check_dependencies()
@@ -400,7 +440,9 @@ if __name__ == "__main__":
     pdf_path = pdfs_dir / f"{output_stem}.pdf"
     result = subprocess.run(
         ["typst", "compile", "--root", str(project_root), str(typ_path), str(pdf_path)],
-        capture_output=True, text=True, encoding="utf-8"
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
     )
     if result.returncode != 0:
         print(f"Typst compile error: {result.stderr}")
@@ -409,9 +451,22 @@ if __name__ == "__main__":
 
     jpg_pattern = str(output_dir / f"{output_stem}_p%02d.jpg")
     result = subprocess.run(
-        ["magick", "-density", "150", str(pdf_path), "-background", "white",
-         "-alpha", "remove", "-quality", "90", jpg_pattern],
-        capture_output=True, text=True, encoding="utf-8"
+        [
+            "magick",
+            "-density",
+            "150",
+            str(pdf_path),
+            "-background",
+            "white",
+            "-alpha",
+            "remove",
+            "-quality",
+            "90",
+            jpg_pattern,
+        ],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
     )
     if result.returncode != 0:
         print(f"ImageMagick error: {result.stderr}")
@@ -425,9 +480,27 @@ if __name__ == "__main__":
         md_processed.unlink()
 
     try:
-        cmarker_dir = Path.home() / "AppData" / "Local" / "typst" / "packages" / "preview" / "cmarker" / "0.1.8"
+        cmarker_dir = (
+            Path.home()
+            / "AppData"
+            / "Local"
+            / "typst"
+            / "packages"
+            / "preview"
+            / "cmarker"
+            / "0.1.9"
+        )
         if platform.system() != "Windows":
-            cmarker_dir = Path.home() / ".local" / "share" / "typst" / "packages" / "preview" / "cmarker" / "0.1.8"
+            cmarker_dir = (
+                Path.home()
+                / ".local"
+                / "share"
+                / "typst"
+                / "packages"
+                / "preview"
+                / "cmarker"
+                / "0.1.9"
+            )
 
         cmarker_images_dir = cmarker_dir / "images"
         if cmarker_images_dir.exists():
